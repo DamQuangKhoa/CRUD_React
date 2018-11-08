@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h1 class="text-center">Quan Li Cong Viec</h1>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Them Cong Viec
+                    </div>
+                    <div class="panel-body">
+
+                        <form action="" method="POST" role="form">
+
+                            <div class="form-group">
+                                <label for="">Ten :</label>
+                                <input type="text" class="form-control" id="" placeholder="Input field">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Trang Thai :</label>
+
+                                <select name="status" id="inputstatus" class="form-control" required="required">
+                                    <option value="">Kich Hoat</option>
+                                    <option value=""> An</option>
+                                </select>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+
+                <button type="button" class="btn btn-primary">Them Cong Viec</button>
+
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                        <div class="input-group">
+
+
+                            <input type="text" name="keyword" placeholder="Nhap Tu Khoa" id="inputkeyword" class="form-control"
+                                value="" required="required" pattern="" title="">
+
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sap
+                                Xep
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">A>Z</a></li>
+                                <li><a href="#">Z>A</a></li>
+                                <li><a href="#">Kich Hoat</a></li>
+                                <li><a href="#">An</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Bootstrap Snipp for Datatable</h4>
+                        <div class="table-responsive">
+
+
+                            <table id="mytable" class="table table-bordred table-striped">
+
+                                <thead>
+
+                                    <th>STT</th>
+                                    <th class="text-center">Ten</th>
+                                    <th>Trang Thai</th>
+                                    <th class="text-center">Hanh Dong</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <input type="tel" name="" id="input" class="form-control" value=""
+                                                        required="required" title="">
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        <td>
+
+                                            <select name="filterStatus" id="inputfilterStatus" class="form-control"
+                                                required="required">
+                                                <option value="">Tat Ca</option>
+                                                <option value="">Kich Hoat</option>
+                                                <option value="">An</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>1</td>
+                                        <td class="text-center">News</td>
+                                        <td class="text-center">
+                                            <span class="label label-danger">Kich Hoat</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class='btn btn-info btn-xs' href="#"><span class="fa fa-pencil"></span>
+                                                Edit</a>
+                                            <a href="#" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span>
+                                                Del</a>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>
