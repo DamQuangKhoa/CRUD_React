@@ -9,7 +9,8 @@ class Application extends React.Component {
     super(props);
     this.state = {
       tasks: [],
-      isDisplayForm: false
+      isDisplayForm: false,
+      taskEditing : null
     };
   }
   componentDidMount() {
@@ -21,39 +22,72 @@ class Application extends React.Component {
     }
   }
   onToggleForm = () => {
-    
     this.setState({
       isDisplayForm: !this.state.isDisplayForm
-      
     });
   };
-  generateData = () => {
-    let tasks = [
-      {
-        id: this.make_id(),
-        name: "Hoc Lap Trinh",
-        status: true
-      },
-      {
-        id: this.make_id(),
-        name: "Hoc Boi",
-        status: false
-      },
-      {
-        id: this.make_id(),
-        name: "Hoc Ngu",
-        status: true
+  findIndex = id => {
+    let { tasks } = this.state;
+    let result = -1;
+    tasks.forEach((t, index) => {
+      console.log(t.id);
+      if (t.id === id) {
+        result = index;
       }
-    ];
-  
+    });
+    return result;
+  };
+  onUpdate = (id) => {
+    console.log(id);
+    
+  }
+  onUpdateStatus = id => {
+    let tasks = this.state.tasks.slice();
+    tasks.map( task => {
+      if(task.id === id){
+        task.status = !task.status;
+      }
+    });    
+    this.setState({tasks: tasks});
+
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+ 
+  onDelete = id => {
+    let tasks = this.state.tasks.slice();
+    let index = this.findIndex(id);
+    if (index !== -1) {
+      tasks.splice(index, 1);
+      this.setState({
+        tasks: tasks
+      });
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  };
+  onSubmit = data => {
+    let tasks = this.state.tasks.slice();
+    let task = {
+      id: this.make_id(),
+      name: data.name,
+      status: data.status === "true" ? true : false
+    };
+    tasks.push(task);
+    this.setState({
+      tasks: tasks
+    });
     localStorage.setItem("tasks", JSON.stringify(tasks));
   };
   make_id = () => {
     return randomstring.generate();
   };
-  render() {
-    let { tasks, isDisplayForm } = this.state;
-    let eleTaskForm = isDisplayForm ? <TaskForm onToggleForm={ this.onToggleForm} /> : "";
+  
+  render(){
+    let { tasks, isDisplayForm} = this.state;
+    let eleTaskForm = isDisplayForm ? (
+      <TaskForm onSubmit={this.onSubmit} onToggleForm={this.onToggleForm} />
+    ) : (
+      ""
+    );
 
     return (
       <React.Fragment>
@@ -83,20 +117,16 @@ class Application extends React.Component {
               >
                 Them Cong Viec
               </button>
-              
-              <button
-                type="button"
-                className=" btn btn-danger"
-                onClick={this.generateData}
-              >
-                Generate Data
-              </button>
+
               <Control />
 
               <div className="row">
                 <div className="col-md-12">
                   <h4>Bootstrap Snipp for Datatable</h4>
-                  <TaskList tasks={tasks} />
+                  <TaskList tasks={tasks}
+                  onUpdate = {this.onUpdate}
+                  onUpdateStatus = {this.onUpdateStatus}
+                  onDelete={this.onDelete} />
                 </div>
               </div>
             </div>

@@ -7,10 +7,16 @@ class TaskList extends React.Component {
     this.state = {};
   }
   render() {
-    let {tasks} = this.props;
-    let elemTasks = tasks.map((task,index) => {
-      return <TaskItem key={task.id} index = {index} task= {task} />
-    })
+    let { tasks } = this.props;
+    let elemTasks = tasks.map((task, index) => {
+      return <TaskItem
+      onDelete = {this.props.onDelete} 
+      onUpdateStatus = {this.props.onUpdateStatus}
+      onUpdate = {this.props.onUpdate}
+      key={task.id}
+      index={index} 
+      task={task} />;
+    });
     return (
       <React.Fragment>
         <div className="table-responsive">
@@ -51,7 +57,7 @@ class TaskList extends React.Component {
                   </select>
                 </td>
               </tr>
-            {elemTasks}
+              {elemTasks}
             </tbody>
           </table>
         </div>

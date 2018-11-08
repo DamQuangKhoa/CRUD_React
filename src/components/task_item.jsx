@@ -5,6 +5,16 @@ class TaskItem extends React.Component {
     super(props);
     this.state = {};
   }
+  onUpdate = () => {
+    this.props.onUpdate(this.props.task.id);
+  }
+  onDelete = () =>{
+    this.props.onDelete(this.props.task.id);
+  }
+  onUpdateStatus = () => {
+    
+    this.props.onUpdateStatus(this.props.task.id);
+  }
   render() {
     let {task, index} = this.props;
     return (
@@ -12,18 +22,18 @@ class TaskItem extends React.Component {
           <tr>
                 <td>{index +1}</td>
                 <td className="text-center">{task.name}</td>
-                <td className="text-center">
-                  <span className={task.status? 'badge badge-danger' : 'badge badge-warning' }>{task.status? 'Kich Hoat': 'An '}</span>
+                <td onClick ={this.onUpdateStatus} className="text-center">
+                  <span   className={task.status? 'badge badge-danger' : 'badge badge-warning' }>{task.status? 'Kich Hoat': 'An '}</span>
                 </td>
                 <td className="text-center">
-                  <a className="btn btn-info btn-xs" href="">
+                  <button onClick ={this.onUpdate} className="btn btn-info btn-xs" >
                     <span className="fa fa-pencil" />
                     Edit
-                  </a>
-                  <a href="" className="btn btn-danger btn-xs">
+                  </button>
+                  <button  onClick ={this.onDelete} className="btn btn-danger btn-xs">
                     <span className="glyphicon glyphicon-remove" />
                     Del
-                  </a>
+                  </button>
                 </td>
               </tr>
       </React.Fragment>

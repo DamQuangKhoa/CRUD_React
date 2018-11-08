@@ -3,7 +3,33 @@ import React from "react";
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      name : '',
+      status: false,
+    };
+  }
+  onClear = () =>{
+    this.setState({
+      name :'',
+      status: false,
+    })
+  }
+  onChange = (event) => {
+    let target = event.target;
+    let name = target.name;
+    let value = target.value; 
+    this.setState({
+      [name] : value
+    })
+  }
+
+  onSubmit = (event) => {
+    event.preventDefault();
+    this.props.onSubmit(this.state);
+    this.onClear();
+    this.props.onToggleForm();
+
+
   }
   render() {
     return (
@@ -20,14 +46,16 @@ class TaskForm extends React.Component {
             
           </div>
           <div className="card-body">
-            <form action="" method="POST" >
+            <form onSubmit ={this.onSubmit}  >
               <div className="form-group">
                 <label>Ten :</label>
                 <input
                   type="text"
                   className="form-control"
-                  id=""
+                  value = { this.state.name}
                   placeholder="Input field"
+                  name="name"
+                  onChange = {this.onChange}
                 />
               </div>
 
@@ -36,19 +64,19 @@ class TaskForm extends React.Component {
 
                 <select
                   name="status"
-                  id="inputstatus"
                   className="form-control"
-                  required="required"
+                  value = {this.state.status}
+                  onChange = { this.onChange}
                 >
-                  <option value="">Kich Hoat</option>
-                  <option value=""> An</option>
+                  <option value={true}>Kich Hoat</option>
+                  <option value={false}> An</option>
                 </select>
               </div>
 
               <button type="submit" className="btn btn-warning mr-3">
                 Luu Lai
               </button>
-              <button type="submit" className="btn btn-danger">
+              <button type= "button" onClick={this.onClear}  className="btn btn-danger">
                 Huy Bo
               </button>
             </form>
