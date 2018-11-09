@@ -17,6 +17,7 @@ class Control extends React.Component {
                 onSearch ={this.props.onSearch}
                 />
                 <Sort 
+                sort = {this.props.sort}
                 onSort = {this.props.onSort}
                 />
 

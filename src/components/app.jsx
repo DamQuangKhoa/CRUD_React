@@ -146,7 +146,7 @@ class Application extends React.Component {
   };
 
   render() {
-    let { tasks, isDisplayForm, taskEditing, filter, keyword } = this.state;
+    let { tasks, isDisplayForm, taskEditing, filter, keyword ,sort} = this.state;
     if (filter) {
       if (filter.name !== null) {
         tasks = tasks.filter(task => {
@@ -159,6 +159,20 @@ class Application extends React.Component {
         return task.name.toLowerCase().indexOf(keyword) !== -1;
       });
     }
+    if (sort.by === 'name') {
+      tasks.sort((a,b) => {
+        if(a.name > b.name) return sort.value;
+        else if(a.name <b.name) return sort.value;
+        return 0;
+      })
+    }else{ 
+      tasks.sort((a,b) => {
+      if(a.status > b.status) return -sort.value;
+      else if(a.status <b.status) return sort.value;
+      return 0;
+      })
+    }
+  
     //   if (filter) {
     //   tasks = tasks.filter(task => {
     //     if (filter.status === -1) {
@@ -168,6 +182,7 @@ class Application extends React.Component {
     //     }
     //   });
     // }
+
     let eleTaskForm = isDisplayForm ? (
       <TaskForm
         task={taskEditing}
@@ -208,6 +223,7 @@ class Application extends React.Component {
               </button>
 
               <Control
+              sort = {this.state.sort}
               onSort = {this.onSort}
               onSearch={this.onSearch} />
 
