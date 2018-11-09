@@ -11,9 +11,14 @@ class Application extends React.Component {
       tasks: [],
       isDisplayForm: false,
       taskEditing: null,
-      filte : {
-        name: '',
-        status:-1
+      filte: {
+        name: "",
+        status: -1
+      },
+      keyword: "",
+      sort: {
+        by: "name",
+        value: 1
       }
     };
   }
@@ -25,6 +30,14 @@ class Application extends React.Component {
       });
     }
   }
+  onSort = data => {
+    this.setState({
+      sort : {
+        by: data.by,
+        value: data.value,
+      }
+    })
+   };
   onToggleForm = () => {
     if (this.state.isDisplayForm && this.state.taskEditing) {
       this.setState({
@@ -37,6 +50,11 @@ class Application extends React.Component {
         taskEditing: null
       });
     }
+  };
+  onSearch = keyword => {
+    this.setState({
+      keyword: keyword.toLowerCase()
+    });
   };
   findIndex = id => {
     let { tasks } = this.state;
@@ -80,15 +98,14 @@ class Application extends React.Component {
 
     localStorage.setItem("tasks", JSON.stringify(tasks));
   };
-  onFilter = (data) => {
-     this.setState({
-       filter :{
-         name: data.filterName.toLowerCase(),
-         status : data.filterStatus
-       }
-     });
-     console.log(this.state.filter);
-     
+  onFilter = data => {
+    this.setState({
+      filter: {
+        name: data.filterName.toLowerCase(),
+        status: data.filterStatus
+      }
+    });
+    console.log(this.state.filter);
   };
   onDelete = id => {
     let tasks = this.state.tasks.slice();
@@ -129,14 +146,28 @@ class Application extends React.Component {
   };
 
   render() {
-    let { tasks, isDisplayForm, taskEditing, filter } = this.state;
+    let { tasks, isDisplayForm, taskEditing, filter, keyword } = this.state;
     if (filter) {
-      if (filter.name) {
-       tasks = tasks.filter( (task) =>{
-         return task.name.toLowerCase().indexOf(filter.name) !== -1;
-       }) 
+      if (filter.name !== null) {
+        tasks = tasks.filter(task => {
+          return task.name.toLowerCase().indexOf(filter.name) !== -1;
+        });
       }
     }
+    if (keyword) {
+      tasks = tasks.filter(task => {
+        return task.name.toLowerCase().indexOf(keyword) !== -1;
+      });
+    }
+    //   if (filter) {
+    //   tasks = tasks.filter(task => {
+    //     if (filter.status === -1) {
+    //       return task;
+    //     } else {
+    //       return task.status === (filter.status === 1 ? true : false);
+    //     }
+    //   });
+    // }
     let eleTaskForm = isDisplayForm ? (
       <TaskForm
         task={taskEditing}
@@ -176,7 +207,9 @@ class Application extends React.Component {
                 Them Cong Viec
               </button>
 
-              <Control />
+              <Control
+              onSort = {this.onSort}
+              onSearch={this.onSearch} />
 
               <div className="row">
                 <div className="col-md-12">

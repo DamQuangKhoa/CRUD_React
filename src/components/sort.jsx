@@ -3,7 +3,21 @@ import React from "react";
 class Sort extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      sort : {
+        by : 'name',
+        value : 1
+      }
+    };
+  }
+  onClick = (sortBy,sortValue) =>{
+    this.setState({
+      sort: {
+        by: sortBy,
+        value: sortValue
+      }
+    })
+   this.props.onSort(this.state.sort) 
   }
   render() {
     return (
@@ -19,17 +33,17 @@ class Sort extends React.Component {
                       <span className="caret" />
                     </button>
                     <ul className="dropdown-menu">
-                      <li>
-                        <a href="#">A>Z</a>
+                      <li onClick={ () => this.onClick('name',1)} >
+                        <a role= "button">A>Z</a>
                       </li>
-                      <li>
-                        <a href="#">Z>A</a>
+                      <li onClick={ () => this.onClick('name',-1)}>
+                        <a role= "button" >Z>A</a>
                       </li>
-                      <li>
-                        <a href="#">Kich Hoat</a>
+                      <li  onClick={ () => this.onClick('status',1)} >
+                        <a role= "button">Kich Hoat</a>
                       </li>
-                      <li>
-                        <a href="#">An</a>
+                      <li onClick={ () => this.onClick('status',-1)}>
+                        <a role= "button">An</a>
                       </li>
                     </ul>
                   </div>

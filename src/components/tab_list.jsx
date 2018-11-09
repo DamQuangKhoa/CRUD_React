@@ -10,9 +10,12 @@ class TaskList extends React.Component {
     };
   }
   onChange = (event) =>{
+     
     let target = event.target;
     let name = target.name;
     let value = target.value;
+    console.log(value);
+
     this.setState({
       [name] :value
     });

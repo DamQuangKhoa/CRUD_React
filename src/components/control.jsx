@@ -13,8 +13,12 @@ class Control extends React.Component {
 
         
               <div className="row">
-                <Search />
-                <Sort />
+                <Search 
+                onSearch ={this.props.onSearch}
+                />
+                <Sort 
+                onSort = {this.props.onSort}
+                />
 
                 
               </div>
