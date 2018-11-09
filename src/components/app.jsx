@@ -2,6 +2,8 @@ import React from "react";
 import TaskForm from "./taskform";
 import Control from "./control";
 import TaskList from "./tab_list";
+import _ from 'lodash';
+// import {findIndex,filter} from 'lodash';
 var randomstring = require("randomstring");
 
 class Application extends React.Component {
@@ -56,16 +58,7 @@ class Application extends React.Component {
       keyword: keyword.toLowerCase()
     });
   };
-  findIndex = id => {
-    let { tasks } = this.state;
-    let result = -1;
-    tasks.forEach((t, index) => {
-      if (t.id === id) {
-        result = index;
-      }
-    });
-    return result;
-  };
+
   onCloseForm = () => {
     this.setState({
       isDisplayForm: false
@@ -78,7 +71,7 @@ class Application extends React.Component {
   };
   onUpdate = id => {
     let { tasks } = this.state;
-    var index = this.findIndex(id);
+    var index = _.findIndex(tasks,(task) => {return task.id === id})
     let taskEditing = tasks[index];
     this.setState({
       taskEditing: taskEditing
@@ -155,9 +148,9 @@ class Application extends React.Component {
       }
     }
     if (keyword) {
-      tasks = tasks.filter(task => {
-        return task.name.toLowerCase().indexOf(keyword) !== -1;
-      });
+      tasks = filter(tasks, (task) =>{
+        return task.name.toLowerCase().indexOf(keyword) !== -1
+      } )
     }
     if (sort.by === 'name') {
       tasks.sort((a,b) => {
