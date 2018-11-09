@@ -10,7 +10,11 @@ class Application extends React.Component {
     this.state = {
       tasks: [],
       isDisplayForm: false,
-      taskEditing : null
+      taskEditing: null,
+      filte : {
+        name: '',
+        status:-1
+      }
     };
   }
   componentDidMount() {
@@ -22,37 +26,70 @@ class Application extends React.Component {
     }
   }
   onToggleForm = () => {
-    this.setState({
-      isDisplayForm: !this.state.isDisplayForm
-    });
+    if (this.state.isDisplayForm && this.state.taskEditing) {
+      this.setState({
+        isDisplayForm: true,
+        taskEditing: null
+      });
+    } else {
+      this.setState({
+        isDisplayForm: !this.state.isDisplayForm,
+        taskEditing: null
+      });
+    }
   };
   findIndex = id => {
     let { tasks } = this.state;
     let result = -1;
     tasks.forEach((t, index) => {
-      console.log(t.id);
       if (t.id === id) {
         result = index;
       }
     });
     return result;
   };
-  onUpdate = (id) => {
-    console.log(id);
-    
-  }
+  onCloseForm = () => {
+    this.setState({
+      isDisplayForm: false
+    });
+  };
+  onShowForm = () => {
+    this.setState({
+      isDisplayForm: true
+    });
+  };
+  onUpdate = id => {
+    let { tasks } = this.state;
+    var index = this.findIndex(id);
+    let taskEditing = tasks[index];
+    this.setState({
+      taskEditing: taskEditing
+    });
+    console.log(taskEditing);
+    this.onShowForm();
+  };
   onUpdateStatus = id => {
     let tasks = this.state.tasks.slice();
-    tasks.map( task => {
-      if(task.id === id){
+    tasks.map(task => {
+      if (task.id === id) {
         task.status = !task.status;
       }
-    });    
-    this.setState({tasks: tasks});
+    });
 
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
- 
+    this.setState({ tasks: tasks });
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  };
+  onFilter = (data) => {
+     this.setState({
+       filter :{
+         name: data.filterName.toLowerCase(),
+         status : data.filterStatus
+       }
+     });
+     console.log(this.state.filter);
+     
+  };
   onDelete = id => {
     let tasks = this.state.tasks.slice();
     let index = this.findIndex(id);
@@ -66,25 +103,46 @@ class Application extends React.Component {
   };
   onSubmit = data => {
     let tasks = this.state.tasks.slice();
-    let task = {
-      id: this.make_id(),
-      name: data.name,
-      status: data.status === "true" ? true : false
-    };
-    tasks.push(task);
+    console.log(data);
+
+    if (data.id !== "") {
+      var index = this.findIndex(data.id);
+      tasks[index] = data;
+    } else {
+      console.log("else");
+
+      let task = {
+        id: this.make_id(),
+        name: data.name,
+        status: data.status === "true" ? true : false
+      };
+      tasks.push(task);
+    }
     this.setState({
-      tasks: tasks
+      tasks: tasks,
+      taskEditing: null
     });
     localStorage.setItem("tasks", JSON.stringify(tasks));
   };
   make_id = () => {
     return randomstring.generate();
   };
-  
-  render(){
-    let { tasks, isDisplayForm} = this.state;
+
+  render() {
+    let { tasks, isDisplayForm, taskEditing, filter } = this.state;
+    if (filter) {
+      if (filter.name) {
+       tasks = tasks.filter( (task) =>{
+         return task.name.toLowerCase().indexOf(filter.name) !== -1;
+       }) 
+      }
+    }
     let eleTaskForm = isDisplayForm ? (
-      <TaskForm onSubmit={this.onSubmit} onToggleForm={this.onToggleForm} />
+      <TaskForm
+        task={taskEditing}
+        onSubmit={this.onSubmit}
+        onToggleForm={this.onToggleForm}
+      />
     ) : (
       ""
     );
@@ -123,10 +181,13 @@ class Application extends React.Component {
               <div className="row">
                 <div className="col-md-12">
                   <h4>Bootstrap Snipp for Datatable</h4>
-                  <TaskList tasks={tasks}
-                  onUpdate = {this.onUpdate}
-                  onUpdateStatus = {this.onUpdateStatus}
-                  onDelete={this.onDelete} />
+                  <TaskList
+                    tasks={tasks}
+                    onUpdate={this.onUpdate}
+                    onUpdateStatus={this.onUpdateStatus}
+                    onDelete={this.onDelete}
+                    onFilter={this.onFilter}
+                  />
                 </div>
               </div>
             </div>

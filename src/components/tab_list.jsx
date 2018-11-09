@@ -4,18 +4,34 @@ import TaskItem from "./task_item";
 class TaskList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      filterName: "",
+      filterStatus: -1
+    };
+  }
+  onChange = (event) =>{
+    let target = event.target;
+    let name = target.name;
+    let value = target.value;
+    this.setState({
+      [name] :value
+    });
+    this.props.onFilter(this.state);
   }
   render() {
     let { tasks } = this.props;
+    let { filterName, filterStatus } = this.state;
     let elemTasks = tasks.map((task, index) => {
-      return <TaskItem
-      onDelete = {this.props.onDelete} 
-      onUpdateStatus = {this.props.onUpdateStatus}
-      onUpdate = {this.props.onUpdate}
-      key={task.id}
-      index={index} 
-      task={task} />;
+      return (
+        <TaskItem
+          onDelete={this.props.onDelete}
+          onUpdateStatus={this.props.onUpdateStatus}
+          onUpdate={this.props.onUpdate}
+          key={task.id}
+          index={index}
+          task={task}
+        />
+      );
     });
     return (
       <React.Fragment>
@@ -37,23 +53,23 @@ class TaskList extends React.Component {
                     <div className="col-sm-12">
                       <input
                         type="text"
-                        name=""
-                        id="input"
-                        className="form-TaskList"
-                      />
+                        name="filterName"
+                        className="form-TaskList w-100"
+                        value={filterName}
+                        onChange = {this.onChange } />
                     </div>
                   </div>
                 </td>
                 <td>
                   <select
                     name="filterStatus"
-                    id="inputfilterStatus"
-                    className="form-TaskList"
-                    required="required"
+                    className="form-TaskList w-100"
+                    onChange = {this.onChange}  
+                    value={filterStatus}
                   >
-                    <option value="">Tat Ca</option>
-                    <option value="">Kich Hoat</option>
-                    <option value="">An</option>
+                    <option value={-1}>Tat Ca</option>
+                    <option value={1}>Kich Hoat</option>
+                    <option value={0}>An</option>
                   </select>
                 </td>
               </tr>
