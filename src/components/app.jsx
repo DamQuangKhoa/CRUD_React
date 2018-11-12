@@ -3,6 +3,7 @@ import TaskForm from "./taskform";
 import Control from "./control";
 import TaskList from "./tab_list";
 import _ from 'lodash';
+import demo from "../training/demo";
 // import {findIndex,filter} from 'lodash';
 var randomstring = require("randomstring");
 

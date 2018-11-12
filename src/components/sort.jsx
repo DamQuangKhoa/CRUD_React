@@ -12,7 +12,6 @@ class Sort extends React.Component {
   }
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
   }
   onClick = (sortBy,sortValue) =>{
     this.setState({
