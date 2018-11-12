@@ -1,5 +1,6 @@
 import React from "react";
-
+import { connect } from "react-redux";
+import * as actions from "./../actions/index";
 class TaskForm extends React.Component {
   constructor(props) {
     super(props);
@@ -26,13 +27,12 @@ class TaskForm extends React.Component {
 
   onSubmit = event => {
     event.preventDefault();
-    this.props.onSubmit(this.state);
+    this.props.onAddTask(this.state);
     this.onClear();
     this.props.onToggleForm();
   };
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-
     if (nextProps && nextProps.task) {
       let taskEdt = nextProps.task;
       if (taskEdt) {
@@ -42,12 +42,12 @@ class TaskForm extends React.Component {
           status: taskEdt.status
         });
       }
-    } else if (nextProps && nextProps.task ===null) {
+    } else if (nextProps && nextProps.task === null) {
       this.setState({
         id: "",
-      name: "",
-      status: false 
-      })
+        name: "",
+        status: false
+      });
     }
   }
   componentDidMount() {
@@ -71,7 +71,7 @@ class TaskForm extends React.Component {
               {id !== "" ? "Cap Nhat Cv" : "Them Cong Viec"}
               <span
                 className="fa fa-times-circle pl-5  text-right"
-                onClick={this.props.onToggleForm}
+                onClick={this.props.onCLoseForm}
               />
             </h3>
           </div>
@@ -120,5 +120,20 @@ class TaskForm extends React.Component {
     );
   }
 }
-
-export default TaskForm;
+const mapStateToProps = state => {
+  return {};
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onAddTask: task => {
+      dispatch(actions.addTask(task));
+    },
+    onCLoseForm: () => {
+      dispatch(actions.closeForm());
+    }
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TaskForm);

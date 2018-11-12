@@ -3,16 +3,14 @@ import TaskForm from "./taskform";
 import Control from "./control";
 import TaskList from "./tab_list";
 import _ from 'lodash';
-import demo from "../training/demo";
+import {connect} from 'react-redux';
+import * as actions from './../actions/index'
 // import {findIndex,filter} from 'lodash';
-var randomstring = require("randomstring");
 
 class Application extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: [],
-      isDisplayForm: false,
       taskEditing: null,
       filte: {
         name: "",
@@ -25,14 +23,7 @@ class Application extends React.Component {
       }
     };
   }
-  componentDidMount() {
-    if (localStorage && localStorage.getItem("tasks")) {
-      var tasks = JSON.parse(localStorage.getItem("tasks"));
-      this.setState({
-        tasks: tasks
-      });
-    }
-  }
+
   onSort = data => {
     this.setState({
       sort : {
@@ -42,17 +33,18 @@ class Application extends React.Component {
     })
    };
   onToggleForm = () => {
-    if (this.state.isDisplayForm && this.state.taskEditing) {
-      this.setState({
-        isDisplayForm: true,
-        taskEditing: null
-      });
-    } else {
-      this.setState({
-        isDisplayForm: !this.state.isDisplayForm,
-        taskEditing: null
-      });
-    }
+    this.props.onToggleForm();
+  //   if (this.state.isDisplayForm && this.state.taskEditing) {
+  //     this.setState({
+  //       isDisplayForm: true,
+  //       taskEditing: null
+  //     });
+  //   } else {
+  //     this.setState({
+  //       isDisplayForm: !this.state.isDisplayForm,
+  //       taskEditing: null
+  //     });
+  //   }
   };
   onSearch = keyword => {
     this.setState({
@@ -112,60 +104,34 @@ class Application extends React.Component {
       localStorage.setItem("tasks", JSON.stringify(tasks));
     }
   };
-  onSubmit = data => {
-    let tasks = this.state.tasks.slice();
-    console.log(data);
-
-    if (data.id !== "") {
-      var index = this.findIndex(data.id);
-      tasks[index] = data;
-    } else {
-      console.log("else");
-
-      let task = {
-        id: this.make_id(),
-        name: data.name,
-        status: data.status === "true" ? true : false
-      };
-      tasks.push(task);
-    }
-    this.setState({
-      tasks: tasks,
-      taskEditing: null
-    });
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  };
-  make_id = () => {
-    return randomstring.generate();
-  };
-
   render() {
-    let { tasks, isDisplayForm, taskEditing, filter, keyword ,sort} = this.state;
-    if (filter) {
-      if (filter.name !== null) {
-        tasks = tasks.filter(task => {
-          return task.name.toLowerCase().indexOf(filter.name) !== -1;
-        });
-      }
-    }
-    if (keyword) {
-      tasks = filter(tasks, (task) =>{
-        return task.name.toLowerCase().indexOf(keyword) !== -1
-      } )
-    }
-    if (sort.by === 'name') {
-      tasks.sort((a,b) => {
-        if(a.name > b.name) return sort.value;
-        else if(a.name <b.name) return sort.value;
-        return 0;
-      })
-    }else{ 
-      tasks.sort((a,b) => {
-      if(a.status > b.status) return -sort.value;
-      else if(a.status <b.status) return sort.value;
-      return 0;
-      })
-    }
+    let {isDisplayForm } = this.props;
+    let {   taskEditing, filter, keyword ,sort} = this.state;
+    // if (filter) {
+    // //   if (filter.name !== null) {
+    // //     tasks = tasks.filter(task => {
+    // //       return task.name.toLowerCase().indexOf(filter.name) !== -1;
+    // //     });
+    // //   }
+    // // }
+    // // if (keyword) {
+    // //   tasks = filter(tasks, (task) =>{
+    // //     return task.name.toLowerCase().indexOf(keyword) !== -1
+    // //   } )
+    // // }
+    // if (sort.by === 'name') {
+    //   tasks.sort((a,b) => {
+    //     if(a.name > b.name) return sort.value;
+    //     else if(a.name <b.name) return sort.value;
+    //     return 0;
+    //   })
+    // }else{ 
+    //   tasks.sort((a,b) => {
+    //   if(a.status > b.status) return -sort.value;
+    //   else if(a.status <b.status) return sort.value;
+    //   return 0;
+    //   })
+    // }
   
     //   if (filter) {
     //   tasks = tasks.filter(task => {
@@ -180,8 +146,6 @@ class Application extends React.Component {
     let eleTaskForm = isDisplayForm ? (
       <TaskForm
         task={taskEditing}
-        onSubmit={this.onSubmit}
-        onToggleForm={this.onToggleForm}
       />
     ) : (
       ""
@@ -225,7 +189,6 @@ class Application extends React.Component {
                 <div className="col-md-12">
                   <h4>Bootstrap Snipp for Datatable</h4>
                   <TaskList
-                    tasks={tasks}
                     onUpdate={this.onUpdate}
                     onUpdateStatus={this.onUpdateStatus}
                     onDelete={this.onDelete}
@@ -240,5 +203,17 @@ class Application extends React.Component {
     );
   }
 }
+const mapStateToProps= (state) => {
+   return {
+     isDisplayForm: state.isDisplayForm
+   };
+}
+const mapDispatchToProps= (dispatch,props) => {
+   return {
+    onToggleForm : () =>{
+      dispatch(actions.toggleForm())
+    }
 
-export default Application;
+   };
+}
+export default connect(mapStateToProps,mapDispatchToProps) (Application);
