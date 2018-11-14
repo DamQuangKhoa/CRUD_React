@@ -27,27 +27,31 @@ class TaskForm extends React.Component {
 
   onSubmit = event => {
     event.preventDefault();
-    this.props.onAddTask(this.state);
+    if (this.props.task.id) {
+      this.props.onSaveTask(this.state);
+    } else {
+      this.props.onAddTask(this.state);
+    }
     this.onClear();
     this.props.onToggleForm();
   };
   //WARNING! To be deprecated in React v17. Use new lifecycle static getDerivedStateFromProps instead.
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.task) {
+    if (nextProps) {
       let taskEdt = nextProps.task;
-      if (taskEdt) {
+      if (taskEdt.id) {
         this.setState({
           id: taskEdt.id,
           name: taskEdt.name,
           status: taskEdt.status
         });
+      } else {
+        this.setState({
+          id: "",
+          name: "",
+          status: false
+        });
       }
-    } else if (nextProps && nextProps.task === null) {
-      this.setState({
-        id: "",
-        name: "",
-        status: false
-      });
     }
   }
   componentDidMount() {
@@ -62,16 +66,19 @@ class TaskForm extends React.Component {
     }
   }
   render() {
+    if (!this.props.isDisplayForm) {
+      return "";
+    }
     let { id } = this.state;
     return (
       <React.Fragment>
         <div className="card card-warning text-white">
           <div className="card-header bg-warning">
             <h3 className="card-title ">
-              {id !== "" ? "Cap Nhat Cv" : "Them Cong Viec"}
+              {id ? "Cap Nhat Cv" : "Them Cong Viec"}
               <span
                 className="fa fa-times-circle pl-5  text-right"
-                onClick={this.props.onCLoseForm}
+                onClick={this.props.onCloseForm}
               />
             </h3>
           </div>
@@ -121,15 +128,27 @@ class TaskForm extends React.Component {
   }
 }
 const mapStateToProps = state => {
-  return {};
+  return {
+    isDisplayForm: state.isDisplayForm,
+    task: state.task
+  };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
     onAddTask: task => {
       dispatch(actions.addTask(task));
     },
-    onCLoseForm: () => {
+    onCloseForm: () => {
       dispatch(actions.closeForm());
+    },
+    onToggleForm: () => {
+      dispatch(actions.toggleForm());
+    },
+    onUpdateTask: task => {
+      dispatch(actions.updateTask(task));
+    },
+    onSaveTask: task => {
+      dispatch(actions.saveTask(task));
     }
   };
 };

@@ -2,10 +2,9 @@ import React from "react";
 import TaskForm from "./taskform";
 import Control from "./control";
 import TaskList from "./tab_list";
-import _ from 'lodash';
-import {connect} from 'react-redux';
-import * as actions from './../actions/index'
-// import {findIndex,filter} from 'lodash';
+// import _ from "lodash";
+import { connect } from "react-redux";
+import * as actions from "./../actions/index";
 
 class Application extends React.Component {
   constructor(props) {
@@ -23,67 +22,27 @@ class Application extends React.Component {
       }
     };
   }
-
   onSort = data => {
     this.setState({
-      sort : {
+      sort: {
         by: data.by,
-        value: data.value,
+        value: data.value
       }
-    })
-   };
-  onToggleForm = () => {
-    this.props.onToggleForm();
-  //   if (this.state.isDisplayForm && this.state.taskEditing) {
-  //     this.setState({
-  //       isDisplayForm: true,
-  //       taskEditing: null
-  //     });
-  //   } else {
-  //     this.setState({
-  //       isDisplayForm: !this.state.isDisplayForm,
-  //       taskEditing: null
-  //     });
-  //   }
+    });
   };
   onSearch = keyword => {
     this.setState({
       keyword: keyword.toLowerCase()
     });
   };
-
-  onCloseForm = () => {
-    this.setState({
-      isDisplayForm: false
-    });
+  onToggleForm = () => {
+   if (this.props.task.id) {
+    this.props.openForm(); 
+   }else{ 
+    this.props.onToggleForm();
+   }
   };
-  onShowForm = () => {
-    this.setState({
-      isDisplayForm: true
-    });
-  };
-  onUpdate = id => {
-    let { tasks } = this.state;
-    var index = _.findIndex(tasks,(task) => {return task.id === id})
-    let taskEditing = tasks[index];
-    this.setState({
-      taskEditing: taskEditing
-    });
-    console.log(taskEditing);
-    this.onShowForm();
-  };
-  onUpdateStatus = id => {
-    let tasks = this.state.tasks.slice();
-    tasks.map(task => {
-      if (task.id === id) {
-        task.status = !task.status;
-      }
-    });
-
-    this.setState({ tasks: tasks });
-
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  };
+  
   onFilter = data => {
     this.setState({
       filter: {
@@ -91,22 +50,10 @@ class Application extends React.Component {
         status: data.filterStatus
       }
     });
-    console.log(this.state.filter);
-  };
-  onDelete = id => {
-    let tasks = this.state.tasks.slice();
-    let index = this.findIndex(id);
-    if (index !== -1) {
-      tasks.splice(index, 1);
-      this.setState({
-        tasks: tasks
-      });
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
   };
   render() {
-    let {isDisplayForm } = this.props;
-    let {   taskEditing, filter, keyword ,sort} = this.state;
+    let { isDisplayForm } = this.props;
+    let { taskEditing, filter, keyword, sort } = this.state;
     // if (filter) {
     // //   if (filter.name !== null) {
     // //     tasks = tasks.filter(task => {
@@ -125,14 +72,14 @@ class Application extends React.Component {
     //     else if(a.name <b.name) return sort.value;
     //     return 0;
     //   })
-    // }else{ 
+    // }else{
     //   tasks.sort((a,b) => {
     //   if(a.status > b.status) return -sort.value;
     //   else if(a.status <b.status) return sort.value;
     //   return 0;
     //   })
     // }
-  
+
     //   if (filter) {
     //   tasks = tasks.filter(task => {
     //     if (filter.status === -1) {
@@ -142,14 +89,6 @@ class Application extends React.Component {
     //     }
     //   });
     // }
-
-    let eleTaskForm = isDisplayForm ? (
-      <TaskForm
-        task={taskEditing}
-      />
-    ) : (
-      ""
-    );
 
     return (
       <React.Fragment>
@@ -162,7 +101,7 @@ class Application extends React.Component {
 
           <div className="row">
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 ">
-              {eleTaskForm}
+              <TaskForm task={taskEditing} />
             </div>
 
             <div
@@ -181,19 +120,15 @@ class Application extends React.Component {
               </button>
 
               <Control
-              sort = {this.state.sort}
-              onSort = {this.onSort}
-              onSearch={this.onSearch} />
+                sort={this.state.sort}
+                onSort={this.onSort}
+                onSearch={this.onSearch}
+              />
 
               <div className="row">
                 <div className="col-md-12">
                   <h4>Bootstrap Snipp for Datatable</h4>
-                  <TaskList
-                    onUpdate={this.onUpdate}
-                    onUpdateStatus={this.onUpdateStatus}
-                    onDelete={this.onDelete}
-                    onFilter={this.onFilter}
-                  />
+                  <TaskList   />
                 </div>
               </div>
             </div>
@@ -203,17 +138,23 @@ class Application extends React.Component {
     );
   }
 }
-const mapStateToProps= (state) => {
-   return {
-     isDisplayForm: state.isDisplayForm
-   };
-}
-const mapDispatchToProps= (dispatch,props) => {
-   return {
-    onToggleForm : () =>{
-      dispatch(actions.toggleForm())
+const mapStateToProps = state => {
+  return {
+    isDisplayForm: state.isDisplayForm,
+    task : state.task
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onToggleForm: () => {
+      dispatch(actions.toggleForm());
+    },
+    openForm: () => {
+      dispatch(actions.openForm());
     }
-
-   };
-}
-export default connect(mapStateToProps,mapDispatchToProps) (Application);
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Application);

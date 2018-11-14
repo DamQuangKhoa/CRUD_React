@@ -1,6 +1,7 @@
 import React from "react";
 import TaskItem from "./task_item";
-import {connect } from "react-redux";
+import { connect } from "react-redux";
+import * as actions from "./../actions/index";
 class TaskList extends React.Component {
   constructor(props) {
     super(props);
@@ -10,27 +11,21 @@ class TaskList extends React.Component {
     };
   }
   onChange = (event) =>{
-     
     let target = event.target;
     let name = target.name;
     let value = target.value;
-    console.log(value);
-
     this.setState({
       [name] :value
     });
     this.props.onFilter(this.state);
   }
+  
   render() {
-    
     let { tasks } = this.props;
     let { filterName, filterStatus } = this.state;
     let elemTasks = tasks.map((task, index) => {
       return (
         <TaskItem
-          onDelete={this.props.onDelete}
-          onUpdateStatus={this.props.onUpdateStatus}
-          onUpdate={this.props.onUpdate}
           key={task.id}
           index={index}
           task={task}
@@ -88,7 +83,13 @@ class TaskList extends React.Component {
 const mapStateToProps = (state) => {
   return { 
     tasks: state.tasks
-   }
+  }
 };
-
-export default connect(mapStateToProps,null) (TaskList);
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onFilter: (filter) => {
+      dispatch(actions.filterTask(filter));
+    },
+  };
+};
+export default connect(mapStateToProps,mapDispatchToProps) (TaskList);
