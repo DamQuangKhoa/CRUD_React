@@ -1,5 +1,4 @@
 import * as types from "../constant/action_type";
-let data = JSON.parse(localStorage.getItem("tasks"));
 let initialState = false;
 
 let myReducer = (state = initialState, action) => {

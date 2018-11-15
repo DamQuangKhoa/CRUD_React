@@ -55,3 +55,10 @@ export const filterTask = (key) => {
     key
   };
 };
+export const search = (keyword) => {
+  return {
+    type: types.SEARCH_TASK,
+    keyword
+  };
+};
+

@@ -31,14 +31,6 @@ let myReducer = (state = initialState, action) => {
 
     case types.LIST_ALL:
       return state;
-    case types.FILTER_TASK:
-    if (action.key.filterName !== null) {
-      
-       var newState = state.filter(task => {
-          return task.name.toLowerCase().indexOf(action.key.filterName) !== -1;
-        });
-      }
-      return newState;
 
     case types.ADD_TASK:
       let newTask = {

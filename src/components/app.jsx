@@ -10,12 +10,7 @@ class Application extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      taskEditing: null,
-      filte: {
-        name: "",
-        status: -1
-      },
-      keyword: "",
+     keyword: "",
       sort: {
         by: "name",
         value: 1
@@ -53,19 +48,9 @@ class Application extends React.Component {
   };
   render() {
     let { isDisplayForm } = this.props;
-    let { taskEditing, filter, keyword, sort } = this.state;
-    // if (filter) {
-    // //   if (filter.name !== null) {
-    // //     tasks = tasks.filter(task => {
-    // //       return task.name.toLowerCase().indexOf(filter.name) !== -1;
-    // //     });
-    // //   }
-    // // }
-    // // if (keyword) {
-    // //   tasks = filter(tasks, (task) =>{
-    // //     return task.name.toLowerCase().indexOf(keyword) !== -1
-    // //   } )
-    // // }
+    let { taskEditing} = this.state;
+    
+    // // 
     // if (sort.by === 'name') {
     //   tasks.sort((a,b) => {
     //     if(a.name > b.name) return sort.value;

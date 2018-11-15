@@ -14,11 +14,9 @@ class Control extends React.Component {
         
               <div className="row">
                 <Search 
-                onSearch ={this.props.onSearch}
                 />
                 <Sort 
                 sort = {this.props.sort}
-                onSort = {this.props.onSort}
                 />
 
                 

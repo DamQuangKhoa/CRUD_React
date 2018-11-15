@@ -37,16 +37,16 @@ class Sort extends React.Component {
                     </button>
                     <ul className="dropdown-menu">
                       <li onClick={ () => this.onClick('name',1)} >
-                        <a role= "button">A>Z</a>
+                        <a  href ='' role= "button">A>Z</a>
                       </li>
                       <li onClick={ () => this.onClick('name',-1)}>
-                        <a role= "button" >Z>A</a>
+                        <a href =''  role= "button" >Z>A</a>
                       </li>
                       <li  onClick={ () => this.onClick('status',1)} >
-                        <a role= "button">Kich Hoat</a>
+                        <a href =''  role= "button">Kich Hoat</a>
                       </li>
                       <li onClick={ () => this.onClick('status',-1)}>
-                        <a role= "button">An</a>
+                        <a  href ='' role= "button">An</a>
                       </li>
                     </ul>
                   </div>
